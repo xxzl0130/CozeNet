@@ -69,7 +69,6 @@ namespace CozeNet.Core.Authorization
             { 
                 DurationSeconds = durationSecond
             };
-            var bodyStr = JsonSerializer.Serialize(body);
             var content = JsonContent.Create(body);
             var request = new HttpRequestMessage(HttpMethod.Post, $"https://{_endpoint}/api/permission/oauth2/token");
             request.Content = content;
