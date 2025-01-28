@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using CozeNet.Chat.Models;
 using CozeNet.Conversation.Models;
 using CozeNet.Core;
 using CozeNet.Core.Authorization;
@@ -29,22 +30,18 @@ namespace CozeNet.Conversation
         /// <returns></returns>
         public async Task<CozeResult<ConversationObject>?> CreateAsync(EnterMessageObject[] enterMessage, object? metaData = null)
         {
-            var url = $"https://{_context.EndPoint}/v1/conversation/create";
             var body = new
             {
                 messages = enterMessage,
                 meta_data = metaData
             };
-            using var request = _context.GenerateRequest("/v1/conversation/create", HttpMethod.Post, JsonContent.Create(body));
-            using var response = await _context.HttpClient!.SendAsync(request);
-            return await response.GetJsonObjectAsync<CozeResult<ConversationObject>>();
+            var api = "/v1/conversation/create";
+            return await _context.GetJsonAsync<CozeResult<ConversationObject>>(api, HttpMethod.Post, JsonContent.Create(body));
         }
 
         public async Task<CozeResult<ConversationObject>?> GetInfoAsync(string conversationId)
         {
-            using var request = _context.GenerateRequest($"/v1/conversation/retrieve?conversation_id={conversationId}", HttpMethod.Get);
-            using var response = await _context.HttpClient!.SendAsync(request);
-            return await response.GetJsonObjectAsync<CozeResult<ConversationObject>>();
+            return await _context.GetJsonAsync<CozeResult<ConversationObject>>($"/v1/conversation/retrieve?conversation_id={conversationId}", HttpMethod.Get);
         }
     }
 }

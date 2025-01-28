@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using CozeNet.Chat.Models;
+using CozeNet.Conversation.Models;
 using CozeNet.Core;
 using CozeNet.Core.Models;
 using CozeNet.Message.Models;
@@ -29,10 +31,8 @@ namespace CozeNet.Message
         public async Task<CozeResult<MessageObject>?> CreateAsync(string conversationId, MessageCreateRequest createRequest)
         {
             var api = "/v1/conversation/message/create";
-            using var request = _context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(createRequest),
+            return await _context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Post, JsonContent.Create(createRequest),
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
-            using var response = _context.HttpClient!.Send(request);
-            return await response.GetJsonObjectAsync<CozeResult<MessageObject>>();
         }
 
         /// <summary>
@@ -44,9 +44,8 @@ namespace CozeNet.Message
         public async Task<MessageListResponse?> ListAsync(string conversationId, MessageListRequest request)
         {
             var api = "/v1/conversation/message/list";
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Post, JsonContent.Create(request),
+            return await _context.GetJsonAsync<MessageListResponse>(api, HttpMethod.Post,
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
-            return await response.GetJsonObjectAsync<MessageListResponse>();
         }
 
         /// <summary>
@@ -58,9 +57,8 @@ namespace CozeNet.Message
         public async Task<CozeResult<MessageObject>?> RetrieveAsync(string conversationId, string messageId)
         {
             var api = "/v1/conversation/message/retrieve";
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Get,
+            return await _context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Get,
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } });
-            return await response.GetJsonObjectAsync<CozeResult<MessageObject>>();
         }
 
         /// <summary>
@@ -72,9 +70,8 @@ namespace CozeNet.Message
         public async Task<MessageModifyResponse?> ModifyAsync(string conversationId, string messageId, MessageModifyRequest request)
         {
             var api = "/v1/conversation/message/modify";
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Post,
+            return await _context.GetJsonAsync<MessageModifyResponse>(api, HttpMethod.Post, JsonContent.Create(request),
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } });
-            return await response.GetJsonObjectAsync<MessageModifyResponse>();
         }
 
         /// <summary>
@@ -89,9 +86,8 @@ namespace CozeNet.Message
         public async Task<CozeResult<MessageObject>?> DeleteAsync(string conversationId, string messageId)
         {
             var api = "/v1/conversation/message/delete";
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Post,
+            return await _context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Post,
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } });
-            return await response.GetJsonObjectAsync<CozeResult<MessageObject>>();
         }
     }
 }

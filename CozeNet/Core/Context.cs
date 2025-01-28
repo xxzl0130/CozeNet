@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using CozeNet.Utils;
 
 namespace CozeNet.Core
 {
@@ -39,6 +40,7 @@ namespace CozeNet.Core
                 }
             }
             request.Headers.Add(AuthorizationHeader, AuthorizationHeaderValue);
+            request.Headers.Add("Content-Type", "application/json");
             return request;
         }
 
@@ -46,6 +48,14 @@ namespace CozeNet.Core
         {
             using var request = GenerateRequest(api, method, content, parameters, headers);
             return await HttpClient!.SendAsync(request);
+        }
+
+        public async Task<T?> GetJsonAsync<T>(string api, HttpMethod method, HttpContent? content = null, 
+            Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
+        {
+            using var request = GenerateRequest(api, method, content, parameters, headers);
+            using var response = await HttpClient!.SendAsync(request);
+            return await response.GetJsonObjectAsync<T>();
         }
 
         public const string AuthorizationHeader = "Authorization";

@@ -69,9 +69,9 @@ namespace CozeNet.Chat
         {
             var api = "/v3/chat";
             request.Stream = false;
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Post, JsonContent.Create(request),
+            var ret = await _context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Post, JsonContent.Create(request),
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
-            return await response.GetJsonObjectAsync<CozeResult<ChatObject>>();
+            return ret;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace CozeNet.Chat
         {
             var api = "/v3/chat";
             chatRequest.Stream = true;
-            var request = _context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(chatRequest),
+            using var request = _context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(chatRequest),
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
             using var response = await _context.HttpClient!.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             response.EnsureSuccessStatusCode();
@@ -105,9 +105,8 @@ namespace CozeNet.Chat
         {
             var api = "/v3/chat/retrieve";
             var parameters = new Dictionary<string, string> { { "conversation_id", conversationId }, { "chat_id", chatId } };
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Get,
+            return await _context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get,
                 parameters: parameters);
-            return await response.GetJsonObjectAsync<CozeResult<ChatObject>>();
         }
 
         /// <summary>
@@ -120,9 +119,8 @@ namespace CozeNet.Chat
         {
             var api = "/v3/chat/message/list";
             var parameters = new Dictionary<string, string> { { "conversation_id", conversationId }, { "chat_id", chatId } };
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Get,
+            return await _context.GetJsonAsync<CozeResult<MessageObject[]>>(api, HttpMethod.Get,
                 parameters: parameters);
-            return await response.GetJsonObjectAsync<CozeResult<MessageObject[]>>();
         }
 
         /// <summary>
@@ -135,15 +133,12 @@ namespace CozeNet.Chat
         public async Task<CozeResult<ChatObject>?> SubmitToolOutputNoneStreamAsync(string conversationId, string chatId, IEnumerable<ToolOutput> toolOutputs)
         {
             var api = "/v3/chat/submit_tool_outputs";
-            var parameters = new Dictionary<string, string> { { "conversation_id", conversationId }, { "chat_id", chatId } };
             var request = new
             {
                 tool_outputs = toolOutputs.ToArray(),
                 stream = false,
             };
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Get, JsonContent.Create(request),
-                parameters: parameters);
-            return await response.GetJsonObjectAsync<CozeResult<ChatObject>>();
+            return await _context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get, JsonContent.Create(request));
         }
 
         /// <summary>
@@ -186,8 +181,7 @@ namespace CozeNet.Chat
                 conversation_id = conversationId,
                 chat_id = chatId
             };
-            using var response = await _context.SendRequestAsync(api, HttpMethod.Post, JsonContent.Create(body));
-            return await response.GetJsonObjectAsync<CozeResult<ChatObject>>();
+            return await _context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get, JsonContent.Create(body));
         }
     }
 }
