@@ -35,15 +35,15 @@ namespace CozeNet.Conversation
                 messages = enterMessage,
                 meta_data = metaData
             };
-            var request = _context.GenerateRequest("/v1/conversation/create", HttpMethod.Post, JsonContent.Create(body));
-            var response = await _context.HttpClient!.SendAsync(request);
+            using var request = _context.GenerateRequest("/v1/conversation/create", HttpMethod.Post, JsonContent.Create(body));
+            using var response = await _context.HttpClient!.SendAsync(request);
             return await response.GetJsonObjectAsync<CozeResult<ConversationObject>>();
         }
 
         public async Task<CozeResult<ConversationObject>?> GetInfoAsync(string conversationId)
         {
-            var request = _context.GenerateRequest($"/v1/conversation/retrieve?conversation_id={conversationId}", HttpMethod.Get);
-            var response = await _context.HttpClient!.SendAsync(request);
+            using var request = _context.GenerateRequest($"/v1/conversation/retrieve?conversation_id={conversationId}", HttpMethod.Get);
+            using var response = await _context.HttpClient!.SendAsync(request);
             return await response.GetJsonObjectAsync<CozeResult<ConversationObject>>();
         }
     }

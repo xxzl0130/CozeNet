@@ -70,10 +70,10 @@ namespace CozeNet.Core.Authorization
                 DurationSeconds = durationSecond
             };
             var content = JsonContent.Create(body);
-            var request = new HttpRequestMessage(HttpMethod.Post, $"https://{_endpoint}/api/permission/oauth2/token");
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"https://{_endpoint}/api/permission/oauth2/token");
             request.Content = content;
             request.Headers.Add("Authorization", $"Bearer {jwt}");
-            var response = await _httpClient.SendAsync(request);
+            using var response = await _httpClient.SendAsync(request);
             var token = await response.GetJsonObjectAsync<OAuthToken>();
             return token?.AccessToken ?? string.Empty;
         }

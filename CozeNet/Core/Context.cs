@@ -44,7 +44,7 @@ namespace CozeNet.Core
 
         public async Task<HttpResponseMessage> SendRequestAsync(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
         {
-            var request = GenerateRequest(api, method, content, parameters, headers);
+            using var request = GenerateRequest(api, method, content, parameters, headers);
             return await HttpClient!.SendAsync(request);
         }
 
