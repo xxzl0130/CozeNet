@@ -25,7 +25,7 @@ namespace CozeNet.Message.Models
         /// 消息详情。详细说明可参考 Message Object。
         /// </summary>
         [JsonPropertyName("data")]
-        public MessageObject[] Data { get; set; }
+        public MessageObject[]? Data { get; set; }
 
         /// <summary>
         /// 返回的消息列表中，第一条消息的 Message ID。
