@@ -9,6 +9,9 @@ namespace CozeNet.Chat.Models
     public class StreamMessage
     {
         public StreamEvents Event { get; set; }
-        public ChatObject? ChatObject { get; set; }
+        /// <summary>
+        /// Chat事件为ChatObject，Message事件为MessageObject
+        /// </summary>
+        public object? Data { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CozeNet.Message.Models
 {
-    public class EnterMessageObject
+    public class BaseMessageObject
     {
         /// <summary>
         /// 发送这条消息的实体。取值：user：代表该条消息内容是用户发送的。assistant：代表该条消息内容是 Bot 发送的。
@@ -47,7 +47,7 @@ namespace CozeNet.Message.Models
         public object? MetaData { get; set; }
     }
 
-    public class MessageObject: EnterMessageObject
+    public class MessageObject: BaseMessageObject
     {
         /// <summary>
         /// Message ID，即消息的唯一标识。

@@ -30,7 +30,7 @@ namespace CozeNet.Core.Authorization
             _endpoint = endpoint;
             _publicKeyFingerprint = publicKeyFingerprint;
             _privateKey = RSA.Create();
-            var privateKeyPem = File.ReadAllText(privateKeyFile);
+            var privateKeyPem = System.IO.File.ReadAllText(privateKeyFile);
             _privateKey.ImportFromPem(privateKeyPem);
             var securityKey = new RsaSecurityKey(_privateKey);
             _signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);

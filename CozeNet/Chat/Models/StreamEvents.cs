@@ -61,7 +61,7 @@ namespace CozeNet.Chat.Models
         /// </summary>
         public const string Done = "done";
 
-        public static StreamEvents ToStreamEvents(this string? str)
+        public static StreamEvents ToChatStreamEvents(this string? str)
         {
             switch (str)
             {

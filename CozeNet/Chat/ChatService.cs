@@ -26,7 +26,7 @@ namespace CozeNet.Chat
             _context = context;
         }
 
-        private static async IAsyncEnumerable<StreamMessage> ProcessStreamResponce(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+        internal static async IAsyncEnumerable<StreamMessage> ProcessStreamResponce(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
             using var reader = new StreamReader(stream);
@@ -45,7 +45,7 @@ namespace CozeNet.Chat
                 if (line.StartsWith("event:"))
                 {
                     var eventStr = line.Substring("event:".Length).Trim();
-                    var eventEnum = eventStr.ToStreamEvents();
+                    var eventEnum = eventStr.ToChatStreamEvents();
                     if (eventEnum == StreamEvents.None)
                         yield break;
                     message = new StreamMessage { Event = eventEnum };
@@ -53,7 +53,12 @@ namespace CozeNet.Chat
                 else if (line.StartsWith("data:"))
                 {
                     var dataStr = line.Substring("data:".Length).Trim();
-                    message.ChatObject = JsonSerializer.Deserialize<ChatObject>(dataStr);
+                    if (message.Event == StreamEvents.DeltaMessage || message.Event == StreamEvents.DeltaAudio || message.Event == StreamEvents.MessageComplete)
+                        message.Data = JsonSerializer.Deserialize<MessageObject>(dataStr);
+                    else if (message.Event != StreamEvents.None)
+                        message.Data = JsonSerializer.Deserialize<ChatObject>(dataStr);
+                    else
+                        message.Data = null;
                     yield return message;
                 }
             }
