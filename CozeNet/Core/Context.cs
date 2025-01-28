@@ -31,8 +31,21 @@ namespace CozeNet.Core
             }
             var request = new HttpRequestMessage(method, url);
             request.Content = content;
+            if (headers != null)
+            {
+                foreach(var kv in headers)
+                {
+                    request.Headers.Add(kv.Key, kv.Value);
+                }
+            }
             request.Headers.Add(AuthorizationHeader, AuthorizationHeaderValue);
             return request;
+        }
+
+        public async Task<HttpResponseMessage> SendRequestAsync(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
+        {
+            var request = GenerateRequest(api, method, content, parameters, headers);
+            return await HttpClient!.SendAsync(request);
         }
 
         public const string AuthorizationHeader = "Authorization";
