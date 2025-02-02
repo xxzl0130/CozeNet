@@ -28,7 +28,7 @@ namespace CozeNet.Conversation
         /// <param name="enterMessage">会话中的消息内容</param>
         /// <param name="metaData">创建消息时的附加消息，获取消息时也会返回此附加消息</param>
         /// <returns></returns>
-        public async Task<CozeResult<ConversationObject>?> CreateAsync(EnterMessageObject[] enterMessage, object? metaData = null)
+        public async Task<CozeResult<ConversationObject>?> CreateAsync(EnterMessageObject[]? enterMessage = null, object? metaData = null)
         {
             var body = new
             {

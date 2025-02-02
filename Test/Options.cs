@@ -17,4 +17,6 @@ internal class Options
     public string? PublicKey { get; set; }
     [Option('k', "private")]
     public string? PrivateKey { get; set; }
+    [Option('b', "bot")]
+    public string? BotID { get; set; }
 }

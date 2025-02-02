@@ -55,7 +55,7 @@ namespace CozeNet.Chat
                     var dataStr = line.Substring("data:".Length).Trim();
                     if (message.Event == StreamEvents.DeltaMessage || message.Event == StreamEvents.DeltaAudio || message.Event == StreamEvents.MessageComplete)
                         message.Data = JsonSerializer.Deserialize<MessageObject>(dataStr);
-                    else if (message.Event != StreamEvents.None)
+                    else if (message.Event != StreamEvents.None && message.Event != StreamEvents.Done)
                         message.Data = JsonSerializer.Deserialize<ChatObject>(dataStr);
                     else
                         message.Data = null;

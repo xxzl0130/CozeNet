@@ -77,6 +77,8 @@ namespace CozeNet.Chat.Models
                     return StreamEvents.MessageComplete;
                 case ChatFailed:
                     return StreamEvents.ChatFailed;
+                case ChatComplete:
+                    return StreamEvents.ChatComplete;
                 case RequireAction:
                     return StreamEvents.RequireAction;
                 case Error:

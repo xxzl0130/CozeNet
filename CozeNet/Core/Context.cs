@@ -23,7 +23,7 @@ namespace CozeNet.Core
             {
                 var builder = new UriBuilder(url);
                 var query = HttpUtility.ParseQueryString(string.Empty);
-                foreach(var kv in parameters)
+                foreach (var kv in parameters)
                 {
                     query[kv.Key] = kv.Value;
                 }
@@ -34,13 +34,12 @@ namespace CozeNet.Core
             request.Content = content;
             if (headers != null)
             {
-                foreach(var kv in headers)
+                foreach (var kv in headers)
                 {
                     request.Headers.Add(kv.Key, kv.Value);
                 }
             }
             request.Headers.Add(AuthorizationHeader, AuthorizationHeaderValue);
-            request.Headers.Add("Content-Type", "application/json");
             return request;
         }
 
@@ -50,7 +49,7 @@ namespace CozeNet.Core
             return await HttpClient!.SendAsync(request);
         }
 
-        public async Task<T?> GetJsonAsync<T>(string api, HttpMethod method, HttpContent? content = null, 
+        public async Task<T?> GetJsonAsync<T>(string api, HttpMethod method, HttpContent? content = null,
             Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
         {
             using var request = GenerateRequest(api, method, content, parameters, headers);
