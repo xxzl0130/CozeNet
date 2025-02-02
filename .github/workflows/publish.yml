@@ -1,0 +1,35 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Pack
+      run: dotnet pack CozeNet/CozeNet.csproj --configuration Release --no-build -o out
+    
+    - name: Push to NuGet
+      run: |
+        cd out
+        for f in *.nupkg
+        do
+          dotnet nuget push $f --api-key ${{secrets.NUGET_SECRET}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        done
