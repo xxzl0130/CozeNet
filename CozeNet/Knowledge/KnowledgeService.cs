@@ -158,14 +158,14 @@ namespace CozeNet.Knowledge
         /// </summary>
         /// <param name="documentIDs"></param>
         /// <returns></returns>
-        public async Task<CozeResult> DeleteDocumentsAsync(IEnumerable<long> documentIDs)
+        public async Task<CozeResult?> DeleteDocumentsAsync(IEnumerable<long> documentIDs)
         {
             var api = "/open_api/knowledge/document/delete";
             var body = new
             {
                 document_ids = documentIDs.ToArray()
             };
-            return await _context.GetJsonAsync<CozeResult?>(api, HttpMethod.Post, JsonContent.Create(body));
+            return await _context.GetJsonAsync<CozeResult>(api, HttpMethod.Post, JsonContent.Create(body));
         }
     }
 }
