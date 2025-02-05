@@ -95,7 +95,7 @@ internal class Test
             else if (msg.Event == CozeNet.Chat.Models.StreamEvents.ChatComplete)
             {
                 var chat = msg.Data as ChatObject;
-                Console.WriteLine($"Chat complete, usage: token count {chat.Usage.TokenCount}, output count {chat.Usage.OutputCount}, input count {chat.Usage.InputCount}")
+                Console.WriteLine($"Chat complete, usage: token count {chat.Usage.TokenCount}, output count {chat.Usage.OutputCount}, input count {chat.Usage.InputCount}");
             }
             else
             {

@@ -19,7 +19,7 @@ namespace CozeNet.Core.Authorization
     {
         private readonly string _appID;
         private readonly string _endpoint;
-        private readonly string _publicKeyFingerprint
+        private readonly string _publicKeyFingerprint;
         private readonly string _privateKeyPem;
         private readonly HttpClient _httpClient;
 
