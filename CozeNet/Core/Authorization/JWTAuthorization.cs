@@ -19,9 +19,8 @@ namespace CozeNet.Core.Authorization
     {
         private readonly string _appID;
         private readonly string _endpoint;
-        private readonly string _publicKeyFingerprint;
-        private readonly RSA _privateKey;
-        private readonly SigningCredentials _signingCredentials;
+        private readonly string _publicKeyFingerprint
+        private readonly string _privateKeyPem;
         private readonly HttpClient _httpClient;
 
         public JWTAuthorization(string appID, string endpoint, string publicKeyFingerprint, string privateKeyFile, HttpClient? httpClient = null)
@@ -29,16 +28,16 @@ namespace CozeNet.Core.Authorization
             _appID = appID;
             _endpoint = endpoint;
             _publicKeyFingerprint = publicKeyFingerprint;
-            _privateKey = RSA.Create();
-            var privateKeyPem = System.IO.File.ReadAllText(privateKeyFile);
-            _privateKey.ImportFromPem(privateKeyPem);
-            var securityKey = new RsaSecurityKey(_privateKey);
-            _signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
-            _httpClient = httpClient ?? new HttpClient(); 
+            _privateKeyPem = System.IO.File.ReadAllText(privateKeyFile);
+            _httpClient = httpClient ?? new HttpClient();
         }
 
         private string GenerateToken(double expireInSecond = 600)
         {
+            using var rsa = RSA.Create();
+            rsa.ImportFromPem(_privateKeyPem);
+            var securityKey = new RsaSecurityKey(rsa);
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
             DateTime utcNow = DateTime.UtcNow;
             var jwtToken = new JwtSecurityToken(
                 issuer: _appID,
@@ -46,7 +45,7 @@ namespace CozeNet.Core.Authorization
                 claims: new Claim[] {
                 },
                 expires: utcNow.AddSeconds(expireInSecond),
-                signingCredentials: _signingCredentials
+                signingCredentials: signingCredentials
             );
             jwtToken.Header.Add("kid", _publicKeyFingerprint);
             jwtToken.Payload.Add("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
@@ -66,7 +65,7 @@ namespace CozeNet.Core.Authorization
         {
             var jwt = GenerateToken(durationSecond);
             var body = new TokenRequestBody
-            { 
+            {
                 DurationSeconds = durationSecond
             };
             var content = JsonContent.Create(body);

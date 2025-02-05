@@ -4,15 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <PackageProjectUrl>https://github.com/xxzl0130/CozeNet</PackageProjectUrl>
     <Authors>xxzl0130</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>Coze.cn API的C#实现</Description>
+    <Copyright>zaxs0130@gmail.com</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="[8.0.0,)"/>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="[8.0.0,)" />
   </ItemGroup>
 
   <ItemGroup>
