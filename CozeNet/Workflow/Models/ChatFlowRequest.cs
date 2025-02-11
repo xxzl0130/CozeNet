@@ -26,6 +26,7 @@ namespace CozeNet.Workflow.Models
         /// 设置对话流的输入参数。
         /// </summary>
         [JsonPropertyName("parameters")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string>? Parameters { get; set; }
 
         /// <summary>
@@ -38,18 +39,21 @@ namespace CozeNet.Workflow.Models
         /// 需要关联的智能体 ID。
         /// </summary>
         [JsonPropertyName("bot_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BotID {  get; set; }
 
         /// <summary>
         /// 对话流对应的会话 ID，对话流产生的消息会保存到此对话中
         /// </summary>
         [JsonPropertyName("conversation_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? ConversationId { get; set; }
 
         /// <summary>
         /// 用于指定一些额外的字段，以 Map[String][String] 格式传入。例如某些插件会隐式用到的经纬度等字段。
         /// </summary>
         [JsonPropertyName("ext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string>? Extra {  get; set; }
     }
 }

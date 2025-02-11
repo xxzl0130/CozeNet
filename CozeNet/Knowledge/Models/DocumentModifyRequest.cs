@@ -25,6 +25,7 @@ namespace CozeNet.Knowledge.Models
         /// 在线网页更新策略，仅在上传在线网页时需要设置。默认不自动更新。详细信息可参考 UpdateRule object。
         /// </summary>
         [JsonPropertyName("update_rule")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public UpdateRule? UpdateRule { get; set; }
     }
 }
