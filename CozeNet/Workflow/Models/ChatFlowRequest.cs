@@ -19,14 +19,14 @@ namespace CozeNet.Workflow.Models
         /// <summary>
         /// 对话中用户问题和历史消息。数组长度限制为 50，即最多传入 50 条消息
         /// </summary>
-        [JsonPropertyName("additional_messages ")]
+        [JsonPropertyName("additional_messages")]
         public List<BaseMessageObject>? AdditionalMessages { get; set; }
 
         /// <summary>
         /// 设置对话流的输入参数。
         /// </summary>
         [JsonPropertyName("parameters")]
-        public Dictionary<string, object>? Parameters { get; set; }
+        public Dictionary<string, string>? Parameters { get; set; }
 
         /// <summary>
         /// 需要关联的扣子应用 ID
