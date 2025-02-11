@@ -25,18 +25,20 @@ namespace CozeNet.Message.Models
         /// 查看指定位置之前的消息。默认为 0，表示不指定位置。如需向前翻页，则指定为返回结果中的 first_id。
         /// </summary>
         [JsonPropertyName("before_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BeforeID { get; set; }
 
         /// <summary>
         /// 查看指定位置之后的消息。默认为 0，表示不指定位置。如需向后翻页，则指定为返回结果中的 last_id。
         /// </summary>
         [JsonPropertyName("after_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? AfterID { get; set; }
 
         /// <summary>
         /// 每次查询返回的数据量。默认为 50，取值范围为 1~50。
         /// </summary>
         [JsonPropertyName("limit")]
-        public int Limit { get; set; }
+        public int Limit { get; set; } = 50;
     }
 }

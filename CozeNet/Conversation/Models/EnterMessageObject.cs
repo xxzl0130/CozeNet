@@ -19,6 +19,7 @@ namespace CozeNet.Conversation.Models
         /// 消息类型。默认为 question。question：用户输入内容。answer：Bot 返回给用户的消息内容，支持增量返回。如果工作流绑定了 messge 节点，可能会存在多 answer 场景，此时可以用流式返回的结束标志来判断所有 answer 完成。function_call：Bot 对话过程中调用函数（function call）的中间结果。 tool_output：调用工具 （function call）后返回的结果。tool_response：调用工具 （function call）后返回的结果。follow_up：如果在 Bot 上配置打开了用户问题建议开关，则会返回推荐问题相关的回复内容。verbose：多 answer 场景下，服务端会返回一个 verbose 包，对应的 content 为 JSON 格式，content.msg_type =generate_answer_finish 代表全部 answer 回复完成。仅发起会话（v3）接口支持将此参数作为入参，且：如果 autoSaveHistory=true，type 支持设置为 question 或 answer。如果 autoSaveHistory=false，type 支持设置为 question、answer、function_call、tool_output/tool_response。其中，type=question 只能和 role=user 对应，即仅用户角色可以且只能发起 question 类型的消息。详细说明可参考消息 type 说明。
         /// </summary>
         [JsonPropertyName("type")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Type { get; set; }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace CozeNet.Conversation.Models
         /// 创建消息时的附加消息，获取消息时也会返回此附加消息。自定义键值对，应指定为 Map 对象格式。长度为 16 对键值对，其中键（key）的长度范围为 1～64 个字符，值（value）的长度范围为 1～512 个字符。
         /// </summary>
         [JsonPropertyName(" meta_data")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object? MetaData { get; set; }
     }
 }

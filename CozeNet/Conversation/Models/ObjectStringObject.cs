@@ -25,12 +25,14 @@ namespace CozeNet.Conversation.Models
         /// 文件或图片内容的 ID。必须是当前账号上传的文件 ID，上传方式可参考上传文件。在 type 为 file 或 image 时，file_id 和 file_url 应至少指定一个。
         /// </summary>
         [JsonPropertyName("file_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FileId { get; set; }
 
         /// <summary>
         /// 文件或图片内容的在线地址。必须是可公共访问的有效地址。在 type 为 file 或 image 时，file_id 和 file_url 应至少指定一个。
         /// </summary>
         [JsonPropertyName("file_url")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FileUrl { get; set; }
     }
 }

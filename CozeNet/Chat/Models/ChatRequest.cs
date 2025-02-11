@@ -38,6 +38,7 @@ namespace CozeNet.Chat.Models
         /// Bot 中定义的变量。在 Bot prompt 中设置变量 {{key}} 后，可以通过该参数传入变量值，同时支持 Jinja2 语法。详细说明可参考变量示例。变量名只支持英文字母和下划线。
         /// </summary>
         [JsonPropertyName("custom_variables")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object? CustomVariables { get; set; }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace CozeNet.Chat.Models
         /// 创建消息时的附加消息，获取消息时也会返回此附加消息。自定义键值对，应指定为 Map 对象格式。长度为 16 对键值对，其中键（key）的长度范围为 1～64 个字符，值（value）的长度范围为 1～512 个字符。
         /// </summary>
         [JsonPropertyName("meta_data")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object? MetaData { get; set; }
     }
 }

@@ -20,7 +20,8 @@ namespace CozeNet.Workflow.Models
         /// 工作流开始节点的输入参数及取值，你可以在指定工作流的编排页面查看参数列表。
         /// </summary>
         [JsonPropertyName("parameters")]
-        public Dictionary<string, object>? Parameters { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, string>? Parameters { get; set; }
 
         /// <summary>
         /// 需要关联的智能体ID。 部分工作流执行时需要指定关联的 Bot，例如存在数据库节点、变量节点等节点的工作流。
@@ -36,6 +37,7 @@ namespace CozeNet.Workflow.Models
         /// user_id：String 类型，表示用户 ID。
         /// </summary>
         [JsonPropertyName("ext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string>? Extra {  get; set; }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace CozeNet.Workflow.Models
         /// 仅运行扣子应用中的工作流时，才需要设置 app_id。智能体绑定的工作流、空间资源库中的工作流无需设置 app_id。
         /// </summary>
         [JsonPropertyName("app_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? AppID { get; set; }
     }
 }

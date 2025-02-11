@@ -34,6 +34,6 @@ namespace CozeNet.Workflow.Models
         /// 预留字段，无需关注。
         /// </summary>
         [JsonPropertyName("cost")]
-        public string Cost { get; set; }
+        public string? Cost { get; set; }
     }
 }
