@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CozeNet.Core;
+﻿using CozeNet.Core;
+using CozeNet.Core.Models;
 using CozeNet.File.Models;
 
 namespace CozeNet.File
@@ -23,7 +18,7 @@ namespace CozeNet.File
         /// </summary>
         /// <param name="localFilename"></param>
         /// <returns></returns>
-        public async Task<FileObject?> UploadFileAsync(string localFilename)
+        public async Task<CozeResult<FileObject?>?> UploadFileAsync(string localFilename)
         {
             if (string.IsNullOrEmpty(localFilename) || !System.IO.File.Exists(localFilename))
                 return null;
@@ -37,13 +32,13 @@ namespace CozeNet.File
         /// </summary>
         /// <param name="localFilename"></param>
         /// <returns></returns>
-        public async Task<FileObject?> UploadFileAsync(Stream stream, string filename)
+        public async  Task<CozeResult<FileObject?>?> UploadFileAsync(Stream stream, string filename)
         {
             using var multipartContent = new MultipartFormDataContent();
             using var fileContent = new StreamContent(stream);
             multipartContent.Add(fileContent, "file", filename);
             var api = "/v1/files/upload";
-            return await _context.GetJsonAsync<FileObject>(api, HttpMethod.Post, multipartContent);
+            return await _context.GetJsonAsync<CozeResult<FileObject?>>(api, HttpMethod.Post, multipartContent);
         }
 
         /// <summary>
@@ -51,10 +46,10 @@ namespace CozeNet.File
         /// </summary>
         /// <param name="fileID"></param>
         /// <returns></returns>
-        public async Task<FileObject?> GetFileInfoAsync(string fileID)
+        public async  Task<CozeResult<FileObject?>?> GetFileInfoAsync(string fileID)
         {
             var api = "/v1/files/retrieve";
-            return await _context.GetJsonAsync<FileObject>(api, HttpMethod.Get, parameters: new Dictionary<string, string> { { "file_id", fileID } });
+            return await _context.GetJsonAsync<CozeResult<FileObject?>>(api, HttpMethod.Get, parameters: new Dictionary<string, string> { { "file_id", fileID } });
         }
     }
 }
