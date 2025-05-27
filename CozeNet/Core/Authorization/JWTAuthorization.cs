@@ -36,14 +36,13 @@ namespace CozeNet.Core.Authorization
         {
             using var rsa = RSA.Create();
             rsa.ImportFromPem(_privateKeyPem);
-            var securityKey = new RsaSecurityKey(rsa);
+            var securityKey = new RsaSecurityKey(rsa.ExportParameters(true));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
             DateTime utcNow = DateTime.UtcNow;
             var jwtToken = new JwtSecurityToken(
                 issuer: _appID,
                 audience: _endpoint,
-                claims: new Claim[] {
-                },
+                claims: [],
                 expires: utcNow.AddSeconds(expireInSecond),
                 signingCredentials: signingCredentials
             );
