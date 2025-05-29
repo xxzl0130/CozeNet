@@ -18,7 +18,7 @@ namespace CozeNet.Core
 
         public HttpRequestMessage GenerateRequest(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
         {
-            var url = $"https://{EndPoint}/{api}";
+            var url = $"https://{EndPoint}{(api.StartsWith("/") ? api : $"/{api}")}";
             if (parameters != null)
             {
                 var builder = new UriBuilder(url);

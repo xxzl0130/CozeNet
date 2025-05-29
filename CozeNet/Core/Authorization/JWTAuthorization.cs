@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using CozeNet.Core.Models;
 using CozeNet.Utils;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +14,7 @@ namespace CozeNet.Core.Authorization
         private readonly string _publicKeyFingerprint;
         private readonly string _privateKeyPem;
         private readonly HttpClient _httpClient;
+        private readonly RSAParameters _rsaParameters;
 
         public JWTAuthorization(string appID, string endpoint, string publicKeyFingerprint, string privateKeyFile, HttpClient? httpClient = null)
         {
@@ -30,20 +23,20 @@ namespace CozeNet.Core.Authorization
             _publicKeyFingerprint = publicKeyFingerprint;
             _privateKeyPem = System.IO.File.ReadAllText(privateKeyFile);
             _httpClient = httpClient ?? new HttpClient();
+            using var rsa = RSA.Create();
+            rsa.ImportFromPem(_privateKeyPem);
+            _rsaParameters = rsa.ExportParameters(true);
         }
 
         private string GenerateToken(double expireInSecond = 600)
         {
-            using var rsa = RSA.Create();
-            rsa.ImportFromPem(_privateKeyPem);
-            var securityKey = new RsaSecurityKey(rsa);
+            var securityKey = new RsaSecurityKey(_rsaParameters);
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
             DateTime utcNow = DateTime.UtcNow;
             var jwtToken = new JwtSecurityToken(
                 issuer: _appID,
                 audience: _endpoint,
-                claims: new Claim[] {
-                },
+                claims: [],
                 expires: utcNow.AddSeconds(expireInSecond),
                 signingCredentials: signingCredentials
             );
