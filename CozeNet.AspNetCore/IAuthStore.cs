@@ -4,6 +4,9 @@ using Microsoft.Extensions.Options;
 
 namespace CozeNet.AspNetCore;
 
+/// <summary>
+/// 验证服务存储接口
+/// </summary>
 public interface IAuthStore
 {
     /// <summary>
@@ -14,10 +17,21 @@ public interface IAuthStore
     Task<string> GetAccessTokenAsync(int? durationSecond = null);
 }
 
+/// <summary>
+/// 验证服务存储实现
+/// </summary>
+/// <param name="authorization">验证令牌获取服务</param>
+/// <param name="cache">分布式缓存</param>
 public class AuthStore(IAuthorization authorization, IDistributedCache cache) : IAuthStore
 {
     private const string CacheKey = "coze_accessToken";
     private static readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+    /// <summary>
+    /// 获取访问令牌
+    /// </summary>
+    /// <param name="durationSecond">有效期 单位：s</param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">token获取失败异常</exception>
     public async Task<string> GetAccessTokenAsync(int? durationSecond = null)
     {
         durationSecond ??= 36400; //默认36400s 即一天

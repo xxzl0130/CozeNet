@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace CozeNet.Workflow.Models
 {
+    /// <summary>
+    /// 运行工作流请求
+    /// </summary>
     public class RunRequest
     {
         /// <summary>
         /// 待执行的 Workflow ID，此工作流应已发布。
-        /// 进入 Workflow 编排页面，在页面 URL 中，workflow 参数后的数字就是 Workflow ID。例如 https://www.coze.com/work_flow?space_id=42463***&workflow_id=73505836754923***，Workflow ID 为 73505836754923***
+        /// 进入 Workflow 编排页面，在页面 URL 中，workflow 参数后的数字就是 Workflow ID。例如 <see href="https://www.coze.com/work_flow?space_id=42463***&workflow_id=73505836754923***" />，Workflow ID 为 73505836754923***
         /// </summary>
         [JsonPropertyName("workflow_id")]
         public string? WorkflowID { get; set; }

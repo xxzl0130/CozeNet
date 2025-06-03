@@ -12,6 +12,9 @@
         <Description>Coze.cn API的C#实现</Description>
         <Copyright>zaxs0130@gmail.com</Copyright>
         <TargetFrameworks>net10.0;net8.0;net9.0</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>

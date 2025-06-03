@@ -8,9 +8,13 @@ using System.Text.Json;
 
 namespace CozeNet.Chat
 {
+    /// <summary>
+    /// 对话服务
+    /// </summary>
+    /// <param name="context"></param>
     public class ChatService(Context context)
     {
-        internal async IAsyncEnumerable<StreamMessage> ProcessStreamResponce(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+        internal async IAsyncEnumerable<StreamMessage> ProcessStreamResponse(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
             using var reader = new StreamReader(stream);
@@ -80,7 +84,7 @@ namespace CozeNet.Chat
                 parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
             using var response = await context.HttpClient!.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             response.EnsureSuccessStatusCode();
-            await foreach (var item in ProcessStreamResponce(response, cancellationToken))
+            await foreach (var item in ProcessStreamResponse(response, cancellationToken))
             {
                 yield return item;
             }
@@ -119,11 +123,12 @@ namespace CozeNet.Chat
         /// <summary>
         /// 提交工具执行结果，非流式响应
         /// </summary>
-        /// <param name="conversationId"></param>
-        /// <param name="chatId"></param>
-        /// <param name="request"></param>
+        /// <param name="conversationId">会话id</param>
+        /// <param name="chatId">对话id</param>
+        /// <param name="toolOutputs">工具执行结果</param>
+        /// <param name="cancellationToken">取消令牌</param>
         /// <returns></returns>
-        public async Task<CozeResult<ChatObject>?> SubmitToolOutputNoneStreamAsync(string conversationId, string chatId, IEnumerable<ToolOutput> toolOutputs)
+        public async Task<CozeResult<ChatObject>?> SubmitToolOutputNoneStreamAsync(string conversationId, string chatId, IEnumerable<ToolOutput> toolOutputs, CancellationToken cancellationToken = default)
         {
             var api = "/v3/chat/submit_tool_outputs";
             SubmitToolOutput request = new()
@@ -131,15 +136,16 @@ namespace CozeNet.Chat
                 ToolOutputs = toolOutputs.ToArray(),
                 Stream = false,
             };
-            return await context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get, JsonContent.Create(request, options: context.JsonOptions));
+            return await context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get, JsonContent.Create(request, options: context.JsonOptions), cancellationToken: cancellationToken);
         }
 
         /// <summary>
         /// 提交工具执行结果，流式响应
         /// </summary>
-        /// <param name="conversationId"></param>
-        /// <param name="chatId"></param>
-        /// <param name="request"></param>
+        /// <param name="conversationId">会话id</param>
+        /// <param name="chatId">对话id</param>
+        /// <param name="toolOutputs">工具执行结果</param>
+        /// <param name="cancellationToken">取消令牌</param>
         /// <returns></returns>
         public async IAsyncEnumerable<StreamMessage> SubmitToolOutputStreamAsync(string conversationId, string chatId, IEnumerable<ToolOutput> toolOutputs, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
@@ -154,7 +160,7 @@ namespace CozeNet.Chat
                 parameters: parameters);
             using var response = await context.HttpClient!.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             response.EnsureSuccessStatusCode();
-            await foreach (var item in ProcessStreamResponce(response, cancellationToken))
+            await foreach (var item in ProcessStreamResponse(response, cancellationToken))
             {
                 yield return item;
             }
@@ -163,10 +169,11 @@ namespace CozeNet.Chat
         /// <summary>
         /// 调用此接口取消进行中的对话。
         /// </summary>
-        /// <param name="conversationId"></param>
-        /// <param name="chatId"></param>
+        /// <param name="conversationId">会话id</param>
+        /// <param name="chatId">对话id</param>
+        /// <param name="cancellationToken">取消令牌</param>
         /// <returns></returns>
-        public async Task<CozeResult<ChatObject>?> CancelChat(string conversationId, string chatId)
+        public async Task<CozeResult<ChatObject>?> CancelChat(string conversationId, string chatId, CancellationToken cancellationToken = default)
         {
             var api = "/v3/chat/cancel";
             BaseChatObject body = new()
@@ -174,7 +181,7 @@ namespace CozeNet.Chat
                 ConversationID = conversationId,
                 ChatID = chatId
             };
-            return await context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get, JsonContent.Create(body, options: context.JsonOptions));
+            return await context.GetJsonAsync<CozeResult<ChatObject>>(api, HttpMethod.Get, JsonContent.Create(body, options: context.JsonOptions), cancellationToken: cancellationToken);
         }
     }
 }

@@ -133,7 +133,7 @@ namespace CozeNet.Workflow
             using var response = await context.HttpClient!.SendAsync(request, HttpCompletionOption.ResponseHeadersRead,
                 cancellationToken);
             response.EnsureSuccessStatusCode();
-            await foreach (var item in chatService.ProcessStreamResponce(response, cancellationToken))
+            await foreach (var item in chatService.ProcessStreamResponse(response, cancellationToken))
             {
                 yield return item;
             }
