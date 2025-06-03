@@ -11,7 +11,7 @@ namespace CozeNet.Workflow.Models
         /// <summary>
         /// 此消息在接口响应中的事件 ID。以 0 为开始。
         /// </summary>
-        public int ID {  get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// 当前流式返回的数据包事件。
@@ -21,6 +21,6 @@ namespace CozeNet.Workflow.Models
         /// <summary>
         /// 事件内容。各个 event 类型的事件内容格式不同。
         /// </summary>
-        public object? Data {  get; set; }
+        public object? Data { get; set; }
     }
 }

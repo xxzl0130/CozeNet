@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CozeNet.Core.Models
 {
-    internal class OAuthToken
+    public class OAuthToken
     {
         [JsonPropertyName("access_token")]
         public string? AccessToken { get; set; }

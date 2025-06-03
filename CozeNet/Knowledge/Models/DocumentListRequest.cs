@@ -13,7 +13,7 @@ namespace CozeNet.Knowledge.Models
         /// 待查看文件的知识库 ID。
         /// </summary>
         [JsonPropertyName("dataset_id")]
-        public long DatasetID {  get; set; }
+        public long DatasetID { get; set; }
 
         /// <summary>
         /// 分页查询时的页码。默认为 1，即从第一页数据开始返回。

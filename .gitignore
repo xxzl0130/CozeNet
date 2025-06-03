@@ -401,3 +401,5 @@ FodyWeavers.xsd
 *.pem
 /Test/Properties/launchSettings.json
 **/.idea
+**/appsettings.Development.json
+**/Properties/

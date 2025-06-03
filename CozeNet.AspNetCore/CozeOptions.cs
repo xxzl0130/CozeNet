@@ -13,7 +13,7 @@ public class CozeOptions
     /// <summary>
     /// 应用id
     /// </summary>
-    public string? AppId {  get; set; }
+    public string? AppId { get; set; }
 
     /// <summary>
     /// 公钥内容
@@ -24,7 +24,7 @@ public class CozeOptions
     /// 私钥文件名
     /// </summary>
     public string? PrivateKey { get; set; }
-    
+
     /// <summary>
     /// 个人访问令牌 如果配置了就会注入PrivateTokenAuthorization
     /// </summary>
@@ -34,7 +34,7 @@ public class CozeOptions
     /// 智能体id
     /// </summary>
     public string? BotId { get; set; }
-    
+
     /// <summary>
     /// 注入的HttpClient自定义名称
     /// </summary>

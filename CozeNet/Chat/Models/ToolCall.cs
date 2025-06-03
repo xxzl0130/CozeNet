@@ -13,13 +13,13 @@ namespace CozeNet.Chat.Models
         /// 上报运行结果的 ID。
         /// </summary>
         [JsonPropertyName("id")]
-        public string? ID {  get; set; }
+        public string? ID { get; set; }
 
         /// <summary>
         /// 工具类型，枚举值为 function。
         /// </summary>
         [JsonPropertyName("type")]
-        public string? Type {  get; set; }
+        public string? Type { get; set; }
 
         /// <summary>
         /// 执行方法 function 的定义。

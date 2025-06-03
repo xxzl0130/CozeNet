@@ -28,7 +28,7 @@ namespace CozeNet.Workflow.Models
                     return StreamEvents.Error;
                 case Done:
                     return StreamEvents.Done;
-                case Interrupt: 
+                case Interrupt:
                     return StreamEvents.Interrupt;
                 default:
                     return StreamEvents.None;

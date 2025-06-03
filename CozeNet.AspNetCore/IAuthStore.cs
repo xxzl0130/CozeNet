@@ -14,10 +14,10 @@ public interface IAuthStore
     Task<string> GetAccessTokenAsync(int? durationSecond = null);
 }
 
-public class AuthStore(IAuthorization  authorization, IDistributedCache cache) : IAuthStore
+public class AuthStore(IAuthorization authorization, IDistributedCache cache) : IAuthStore
 {
     private const string CacheKey = "coze_accessToken";
-    private readonly SemaphoreSlim _semaphoreSlim = new (1, 1);
+    private static readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
     public async Task<string> GetAccessTokenAsync(int? durationSecond = null)
     {
         durationSecond ??= 36400; //默认36400s 即一天
@@ -45,6 +45,6 @@ public class AuthStore(IAuthorization  authorization, IDistributedCache cache) :
         {
             _semaphoreSlim.Release();
         }
-        
+
     }
 }

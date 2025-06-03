@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using CozeNet.Chat.Models;
+﻿using System.Net.Http.Json;
 using CozeNet.Conversation.Models;
 using CozeNet.Core;
-using CozeNet.Core.Authorization;
 using CozeNet.Core.Models;
-using CozeNet.Utils;
 
 namespace CozeNet.Conversation
 {
@@ -17,7 +9,8 @@ namespace CozeNet.Conversation
     {
         private Context _context;
 
-        public ConversationService(Context context) {
+        public ConversationService(Context context)
+        {
             _context = context;
         }
 
@@ -27,21 +20,17 @@ namespace CozeNet.Conversation
         /// </summary>
         /// <param name="enterMessage">会话中的消息内容</param>
         /// <param name="metaData">创建消息时的附加消息，获取消息时也会返回此附加消息</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<CozeResult<ConversationObject>?> CreateAsync(EnterMessageObject[]? enterMessage = null, object? metaData = null)
+        public async Task<CozeResult<ConversationObject>?> CreateAsync(EnterMessageObject[]? enterMessage = null, object? metaData = null, CancellationToken cancellationToken = default)
         {
-            var body = new
-            {
-                messages = enterMessage,
-                meta_data = metaData
-            };
-            var api = "/v1/conversation/create";
-            return await _context.GetJsonAsync<CozeResult<ConversationObject>>(api, HttpMethod.Post, JsonContent.Create(body));
+            const string api = "/v1/conversation/create";
+            return await _context.GetJsonAsync<CozeResult<ConversationObject>>(api, HttpMethod.Post, JsonContent.Create(new CreateConversationObject(enterMessage, metaData), options: _context.JsonOptions), cancellationToken: cancellationToken);
         }
 
-        public async Task<CozeResult<ConversationObject>?> GetInfoAsync(string conversationId)
+        public async Task<CozeResult<ConversationObject>?> GetInfoAsync(string conversationId, CancellationToken cancellationToken = default)
         {
-            return await _context.GetJsonAsync<CozeResult<ConversationObject>>($"/v1/conversation/retrieve?conversation_id={conversationId}", HttpMethod.Get);
+            return await _context.GetJsonAsync<CozeResult<ConversationObject>>($"/v1/conversation/retrieve?conversation_id={conversationId}", HttpMethod.Get, cancellationToken: cancellationToken);
         }
     }
 }

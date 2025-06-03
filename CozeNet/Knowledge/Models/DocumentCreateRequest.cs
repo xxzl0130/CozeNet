@@ -14,7 +14,7 @@ namespace CozeNet.Knowledge.Models
         /// 例如 https://bots.bytedance.net/space/736142423532160****/knowledge/738509371792341****，知识库 ID 为 738509371792341****。
         /// </summary>
         [JsonPropertyName("dataset_id")]
-        public string DatasetId { get; set; }
+        public required string DatasetId { get; set; }
 
         /// <summary>
         /// 待上传文件的元数据信息。数组最大长度为 10，即每次最多上传 10 个文件。

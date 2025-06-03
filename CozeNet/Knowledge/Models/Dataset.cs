@@ -91,7 +91,7 @@ namespace CozeNet.Knowledge.Models
         /// 知识库 ID。
         /// </summary>
         [JsonPropertyName("dataset_id")]
-        public string? DatasetID {  get; set; }
+        public string? DatasetID { get; set; }
 
         /// <summary>
         /// 知识库创建时间，秒级时间戳。

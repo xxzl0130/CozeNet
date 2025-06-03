@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CozeNet.AspNetCore", "CozeNet.AspNetCore\CozeNet.AspNetCore.csproj", "{23F7F8D1-D6EE-4AED-B3FF-29F79DFEE0FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreTest", "AspNetCoreTest\AspNetCoreTest.csproj", "{27C5E161-EE57-4C03-B044-5276E303EC29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{23F7F8D1-D6EE-4AED-B3FF-29F79DFEE0FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23F7F8D1-D6EE-4AED-B3FF-29F79DFEE0FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23F7F8D1-D6EE-4AED-B3FF-29F79DFEE0FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C5E161-EE57-4C03-B044-5276E303EC29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C5E161-EE57-4C03-B044-5276E303EC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C5E161-EE57-4C03-B044-5276E303EC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C5E161-EE57-4C03-B044-5276E303EC29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

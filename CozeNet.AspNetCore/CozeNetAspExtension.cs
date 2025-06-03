@@ -61,7 +61,7 @@ public static class CozeNetAspExtension
         services.AddScoped<MessageService>();
         services.AddScoped<WorkflowService>();
         services.AddScoped<ConversationService>();
-        
+
         return services;
     }
 }

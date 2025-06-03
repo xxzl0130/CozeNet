@@ -108,6 +108,6 @@ namespace CozeNet.Knowledge.Models
         /// 上传的本地文档的唯一标识。
         /// </summary>
         [JsonPropertyName("tos_uri")]
-        public string? TosURI {  get; set; }
+        public string? TosURI { get; set; }
     }
 }

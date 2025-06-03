@@ -8,12 +8,12 @@ using CozeNet.Core.Models;
 
 namespace CozeNet.Knowledge.Models
 {
-    public class DocumentListResponse: CozeResult<DocumentInfo[]>
+    public class DocumentListResponse : CozeResult<DocumentInfo[]>
     {
         /// <summary>
         /// 指定知识库中的文件总数。
         /// </summary>
         [JsonPropertyName("total")]
-        public int Total {  get; set; }
+        public int Total { get; set; }
     }
 }

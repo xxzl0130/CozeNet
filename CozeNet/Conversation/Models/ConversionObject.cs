@@ -16,7 +16,7 @@ namespace CozeNet.Conversation.Models
         /// Conversation ID，即会话的唯一标识。
         /// </summary>
         [JsonPropertyName("id")]
-        public string ID { get; set; }
+        public required string ID { get; set; }
 
         /// <summary>
         /// 会话创建的时间。格式为 10 位的 Unixtime 时间戳，单位为秒。

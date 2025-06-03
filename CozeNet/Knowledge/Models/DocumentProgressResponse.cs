@@ -17,7 +17,7 @@ namespace CozeNet.Knowledge.Models
         public DocumentProgress[]? Data { get; set; }
     }
 
-    public class DocumentProgressResponse: CozeResult<DocumentProgressResponseData>
+    public class DocumentProgressResponse : CozeResult<DocumentProgressResponseData>
     {
     }
 }

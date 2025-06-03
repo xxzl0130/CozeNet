@@ -19,7 +19,7 @@ namespace CozeNet.Workflow.Models
         /// 输出消息的节点名称，例如消息节点、结束节点。
         /// </summary>
         [JsonPropertyName("node_title")]
-        public string? NodeTitle {  get; set; }
+        public string? NodeTitle { get; set; }
 
         /// <summary>
         /// 此消息在节点中的消息 ID，从 0 开始计数，例如消息节点的第 5 条消息。
@@ -31,13 +31,13 @@ namespace CozeNet.Workflow.Models
         /// node_is_finish
         /// </summary>
         [JsonPropertyName("node_is_finish")]
-        public bool NodeIsFinish {  get; set; }
+        public bool NodeIsFinish { get; set; }
 
         /// <summary>
         /// 额外字段。
         /// </summary>
         [JsonPropertyName("ext")]
-        public Dictionary<string, string>? Extra {  get; set; }
+        public Dictionary<string, string>? Extra { get; set; }
 
         /// <summary>
         /// 预留字段，无需关注。
