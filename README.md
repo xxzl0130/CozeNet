@@ -126,3 +126,4 @@ public ChatController(ConversationService conversationService, ChatService chatS
 }
 ```
 
+[AspNet Core集成参考示例](https://github.com/xxzl0130/CozeNet/blob/main/AspNetCoreTest)
