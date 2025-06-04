@@ -26,7 +26,7 @@ jobs:
     - name: Pack
       run: |
         dotnet pack CozeNet/CozeNet.csproj --configuration Release --no-build -o out
-        dotnet pack CozeNet.AspNetCore\CozeNet.AspNetCore.csproj --configuration Release --no-build -o out
+        dotnet pack CozeNet.AspNetCore/CozeNet.AspNetCore.csproj --configuration Release --no-build -o out
     
     - name: Push to NuGet
       run: |
