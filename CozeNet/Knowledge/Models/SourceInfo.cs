@@ -43,6 +43,6 @@ namespace CozeNet.Knowledge.Models
         /// 通过上传文件接口获取的文件 ID。
         /// </summary>
         [JsonPropertyName("source_file_id")]
-        public long SourceFileID {  get; set; }
+        public long SourceFileID { get; set; }
     }
 }

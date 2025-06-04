@@ -11,8 +11,17 @@ using Microsoft.Extensions.Options;
 
 namespace CozeNet.AspNetCore;
 
+/// <summary>
+/// Asp扩展方法类
+/// </summary>
 public static class CozeNetAspExtension
 {
+    /// <summary>
+    /// Asp扩展方法
+    /// </summary>
+    /// <param name="services">服务集合</param>
+    /// <param name="configuration">配置</param>
+    /// <returns></returns>
     public static IServiceCollection AddCozeNet(this IServiceCollection services,
         Microsoft.Extensions.Configuration.IConfiguration configuration)
     {
@@ -61,7 +70,7 @@ public static class CozeNetAspExtension
         services.AddScoped<MessageService>();
         services.AddScoped<WorkflowService>();
         services.AddScoped<ConversationService>();
-        
+
         return services;
     }
 }

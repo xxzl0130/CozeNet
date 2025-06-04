@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace CozeNet.Workflow.Models
 {
+    /// <summary>
+    /// 运行工作流请求
+    /// </summary>
     public class RunRequest
     {
         /// <summary>
         /// 待执行的 Workflow ID，此工作流应已发布。
-        /// 进入 Workflow 编排页面，在页面 URL 中，workflow 参数后的数字就是 Workflow ID。例如 https://www.coze.com/work_flow?space_id=42463***&workflow_id=73505836754923***，Workflow ID 为 73505836754923***
+        /// 进入 Workflow 编排页面，在页面 URL 中，workflow 参数后的数字就是 Workflow ID。例如 <see href="https://www.coze.com/work_flow?space_id=42463***&workflow_id=73505836754923***" />，Workflow ID 为 73505836754923***
         /// </summary>
         [JsonPropertyName("workflow_id")]
-        public string? WorkflowID {  get; set; }
+        public string? WorkflowID { get; set; }
 
         /// <summary>
         /// 工作流开始节点的输入参数及取值，你可以在指定工作流的编排页面查看参数列表。
@@ -27,7 +30,7 @@ namespace CozeNet.Workflow.Models
         /// 需要关联的智能体ID。 部分工作流执行时需要指定关联的 Bot，例如存在数据库节点、变量节点等节点的工作流。
         /// </summary>
         [JsonPropertyName("bot_id")]
-        public string? BotID {  get; set; }
+        public string? BotID { get; set; }
 
         /// <summary>
         /// 用于指定一些额外的字段
@@ -38,7 +41,7 @@ namespace CozeNet.Workflow.Models
         /// </summary>
         [JsonPropertyName("ext")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, string>? Extra {  get; set; }
+        public Dictionary<string, string>? Extra { get; set; }
 
         /// <summary>
         /// 是否异步运行。异步运行后可通过本接口返回的 execute_id 调用查询工作流异步执行结果API 获取工作流的最终执行结果。

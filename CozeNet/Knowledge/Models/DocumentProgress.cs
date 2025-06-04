@@ -46,7 +46,7 @@ namespace CozeNet.Knowledge.Models
         /// 文件的 ID。
         /// </summary>
         [JsonPropertyName("document_id")]
-        public string? DocumentID {  get; set; }
+        public string? DocumentID { get; set; }
 
         /// <summary>
         /// 在线网页是否自动更新。取值包括：
@@ -60,7 +60,7 @@ namespace CozeNet.Knowledge.Models
         /// 文件名称。
         /// </summary>
         [JsonPropertyName("document_name")]
-        public string? DocumentName {  get; set; }
+        public string? DocumentName { get; set; }
 
         /// <summary>
         /// 预期剩余时间，单位为秒。
@@ -73,7 +73,7 @@ namespace CozeNet.Knowledge.Models
         /// 仅文档处理失败时会返回此参数。
         /// </summary>
         [JsonPropertyName("status_descript")]
-        public string? StatusDescript {  get; set; }
+        public string? StatusDescript { get; set; }
 
         /// <summary>
         /// 在线网页自动更新的频率。单位为小时。

@@ -6,23 +6,16 @@ using System.Threading.Tasks;
 
 namespace CozeNet.Core.Authorization
 {
-    public class PrivateTokenAuthorization : IAuthorization
+    public class PrivateTokenAuthorization(string token) : IAuthorization
     {
-        private readonly string _token;
-
-        public PrivateTokenAuthorization(string token)
-        {
-            _token = token;
-        }
-
         public string GetAccessToken(int durationSecond)
         {
-            return _token;
+            return token;
         }
 
-        public Task<string> GetAccessTokenAsync(int durationSecond)
+        public Task<string> GetAccessTokenAsync(int durationSecond, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(_token);
+            return Task.FromResult(token);
         }
     }
 }

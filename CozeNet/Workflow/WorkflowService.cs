@@ -1,65 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CozeNet.Core;
+﻿using CozeNet.Core;
 using CozeNet.Workflow.Models;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Threading;
-using CozeNet.Chat.Models;
 using CozeNet.Chat;
 
 namespace CozeNet.Workflow
 {
-    public class WorkflowService
+    public class WorkflowService(Context context, ChatService chatService)
     {
-        private Context _context;
-
-        public WorkflowService(Context context)
-        {
-            _context = context;
-        }
-
         /// <summary>
         /// 执行已发布的工作流。
         /// 非流式
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<RunResponse?> RunAsync(RunRequest request)
+        public async Task<RunResponse?> RunAsync(RunRequest request, CancellationToken cancellationToken = default)
         {
-            var api = "/v1/workflow/run";
+            const string api = "/v1/workflow/run";
             request.IsAsync = false;
-            return await _context.GetJsonAsync<RunResponse>(api, HttpMethod.Post, JsonContent.Create(request));
+            return await context.GetJsonAsync<RunResponse>(api, HttpMethod.Post, JsonContent.Create(request, options: context.JsonOptions), cancellationToken: cancellationToken);
         }
 
-        private static async IAsyncEnumerable<Models.StreamMessage> ProcessStream(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        private async IAsyncEnumerable<Models.StreamMessage> ProcessStream(HttpResponseMessage response,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
             using var reader = new StreamReader(stream);
 
-            Models.StreamMessage message = new ();
+            StreamMessage message = new();
 
             while (!reader.EndOfStream)
             {
                 if (cancellationToken.IsCancellationRequested)
                     yield break;
 
-                var line = await reader.ReadLineAsync();
+                var line = await reader.ReadLineAsync(cancellationToken);
                 if (string.IsNullOrEmpty(line))
                     continue;
 
                 if (line.StartsWith("id:"))
                 {
-                    var idStr = line.Substring("id:".Length);
+                    var idStr = line["id:".Length..];
                     message.ID = int.Parse(idStr);
                 }
                 else if (line.StartsWith("event:"))
                 {
-                    var eventStr = line.Substring("event:".Length).Trim();
+                    var eventStr = line["event:".Length..].Trim();
                     var eventEnum = eventStr.ToWorkflowStreamEvent();
                     if (eventEnum == Models.StreamEvents.None)
                         yield break;
@@ -67,22 +55,15 @@ namespace CozeNet.Workflow
                 }
                 else if (line.StartsWith("data:"))
                 {
-                    var dataStr = line.Substring("data:".Length).Trim();
-                    switch (message.Event)
+                    var dataStr = line["data:".Length..].Trim();
+                    message.Data = message.Event switch
                     {
-                        case Models.StreamEvents.Message:
-                            message.Data = JsonSerializer.Deserialize<MessageEvent>(dataStr);
-                            break;
-                        case Models.StreamEvents.Error:
-                            message.Data = JsonSerializer.Deserialize<ErrorEvent>(dataStr);
-                            break;
-                        case Models.StreamEvents.Interrupt:
-                            message.Data = JsonSerializer.Deserialize<InterruptEvent>(dataStr);
-                            break;
-                        default:
-                            message.Data = null;
-                            break;
-                    }
+                        StreamEvents.Message => JsonSerializer.Deserialize<MessageEvent>(dataStr, options: context.JsonOptions),
+                        StreamEvents.Error => JsonSerializer.Deserialize<ErrorEvent>(dataStr, options: context.JsonOptions),
+                        StreamEvents.Interrupt => JsonSerializer.Deserialize<InterruptEvent>(dataStr, options: context.JsonOptions),
+                        _ => null
+                    };
+
                     yield return message;
                 }
             }
@@ -94,12 +75,13 @@ namespace CozeNet.Workflow
         /// <param name="runRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Models.StreamMessage> RunStreamAsync(RunRequest runRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<Models.StreamMessage> RunStreamAsync(RunRequest runRequest,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var api = "/v1/workflow/run";
             runRequest.IsAsync = true;
-            using var request = _context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(runRequest));
-            using var response = await _context.HttpClient!.SendAsync(request);
+            using var request = context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(runRequest, options: context.JsonOptions));
+            using var response = await context.HttpClient!.SendAsync(request);
             await foreach (var item in ProcessStream(response, cancellationToken))
             {
                 yield return item;
@@ -112,11 +94,12 @@ namespace CozeNet.Workflow
         /// <param name="resumeRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Models.StreamMessage> ResumeStreamAsync(ResumeRequest resumeRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<Models.StreamMessage> ResumeStreamAsync(ResumeRequest resumeRequest,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var api = "/v1/workflow/stream_resume";
-            using var request = _context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(resumeRequest));
-            using var response = await _context.HttpClient!.SendAsync(request);
+            using var request = context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(resumeRequest, options: context.JsonOptions));
+            using var response = await context.HttpClient!.SendAsync(request, cancellationToken);
             await foreach (var item in ProcessStream(response, cancellationToken))
             {
                 yield return item;
@@ -126,13 +109,14 @@ namespace CozeNet.Workflow
         /// <summary>
         /// 工作流异步运行后，查看执行结果。
         /// </summary>
-        /// <param name="workflowID"></param>
-        /// <param name="executeID"></param>
+        /// <param name="workflowId"></param>
+        /// <param name="executeId"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<AsyncResult?> GetAsyncResultAsync(string workflowID, string executeID)
+        public async Task<AsyncResult?> GetAsyncResultAsync(string workflowId, string executeId, CancellationToken cancellationToken = default)
         {
-            var api = $"/v1/workflows/{workflowID}/run_histories/{executeID}";
-            return await _context.GetJsonAsync<AsyncResult>(api, HttpMethod.Get);
+            var api = $"/v1/workflows/{workflowId}/run_histories/{executeId}";
+            return await context.GetJsonAsync<AsyncResult>(api, HttpMethod.Get, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -141,13 +125,15 @@ namespace CozeNet.Workflow
         /// <param name="chatFlowRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Chat.Models.StreamMessage> RunChatFlowAsync(ChatFlowRequest chatFlowRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<Chat.Models.StreamMessage> RunChatFlowAsync(ChatFlowRequest chatFlowRequest,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var api = "/v1/workflows/chat";
-            using var request = _context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(chatFlowRequest));
-            using var response = await _context.HttpClient!.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            const string api = "/v1/workflows/chat";
+            using var request = context.GenerateRequest(api, HttpMethod.Post, JsonContent.Create(chatFlowRequest, options: context.JsonOptions));
+            using var response = await context.HttpClient!.SendAsync(request, HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken);
             response.EnsureSuccessStatusCode();
-            await foreach (var item in ChatService.ProcessStreamResponce(response, cancellationToken))
+            await foreach (var item in chatService.ProcessStreamResponse(response, cancellationToken))
             {
                 yield return item;
             }

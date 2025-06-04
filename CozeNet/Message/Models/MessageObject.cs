@@ -47,7 +47,7 @@ namespace CozeNet.Message.Models
         public object? MetaData { get; set; }
     }
 
-    public class MessageObject: BaseMessageObject
+    public class MessageObject : BaseMessageObject
     {
         /// <summary>
         /// Message ID，即消息的唯一标识。

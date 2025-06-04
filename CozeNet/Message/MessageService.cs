@@ -1,38 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using CozeNet.Chat.Models;
-using CozeNet.Conversation.Models;
+﻿using System.Net.Http.Json;
 using CozeNet.Core;
 using CozeNet.Core.Models;
 using CozeNet.Message.Models;
-using CozeNet.Utils;
 
 namespace CozeNet.Message
 {
-    public class MessageService
+    public class MessageService(Context context)
     {
-        private Context _context;
-
-        public MessageService(Context context)
-        {
-            _context = context;
-        }
-
         /// <summary>
         /// 创建消息
         /// </summary>
         /// <param name="conversationId">会话ID</param>
-        /// <param name="request"></param>
+        /// <param name="createRequest"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<CozeResult<MessageObject>?> CreateAsync(string conversationId, MessageCreateRequest createRequest)
+        public async Task<CozeResult<MessageObject>?> CreateAsync(string conversationId, MessageCreateRequest createRequest, CancellationToken cancellationToken = default)
         {
-            var api = "/v1/conversation/message/create";
-            return await _context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Post, JsonContent.Create(createRequest),
-                parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
+            const string api = "/v1/conversation/message/create";
+            return await context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Post, JsonContent.Create(createRequest, options: context.JsonOptions),
+                parameters: new Dictionary<string, string> { { "conversation_id", conversationId } }, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -40,12 +26,13 @@ namespace CozeNet.Message
         /// </summary>
         /// <param name="conversationId"></param>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<MessageListResponse?> ListAsync(string conversationId, MessageListRequest request)
+        public async Task<MessageListResponse?> ListAsync(string conversationId, MessageListRequest request, CancellationToken cancellationToken = default)
         {
-            var api = "/v1/conversation/message/list";
-            return await _context.GetJsonAsync<MessageListResponse>(api, HttpMethod.Post,
-                parameters: new Dictionary<string, string> { { "conversation_id", conversationId } });
+            const string api = "/v1/conversation/message/list";
+            return await context.GetJsonAsync<MessageListResponse>(api, HttpMethod.Post,
+                parameters: new Dictionary<string, string> { { "conversation_id", conversationId } }, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -54,11 +41,11 @@ namespace CozeNet.Message
         /// <param name="conversationId"></param>
         /// <param name="messageId"></param>
         /// <returns></returns>
-        public async Task<CozeResult<MessageObject>?> RetrieveAsync(string conversationId, string messageId)
+        public async Task<CozeResult<MessageObject>?> RetrieveAsync(string conversationId, string messageId, CancellationToken cancellationToken = default)
         {
-            var api = "/v1/conversation/message/retrieve";
-            return await _context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Get,
-                parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } });
+            const string api = "/v1/conversation/message/retrieve";
+            return await context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Get,
+                parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } }, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -66,12 +53,14 @@ namespace CozeNet.Message
         /// </summary>
         /// <param name="conversationId"></param>
         /// <param name="messageId"></param>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<MessageModifyResponse?> ModifyAsync(string conversationId, string messageId, MessageModifyRequest request)
+        public async Task<MessageModifyResponse?> ModifyAsync(string conversationId, string messageId, MessageModifyRequest request, CancellationToken cancellationToken = default)
         {
-            var api = "/v1/conversation/message/modify";
-            return await _context.GetJsonAsync<MessageModifyResponse>(api, HttpMethod.Post, JsonContent.Create(request),
-                parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } });
+            const string api = "/v1/conversation/message/modify";
+            return await context.GetJsonAsync<MessageModifyResponse>(api, HttpMethod.Post, JsonContent.Create(request, options: context.JsonOptions),
+                parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } }, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -82,12 +71,13 @@ namespace CozeNet.Message
         /// </summary>
         /// <param name="conversationId"></param>
         /// <param name="messageId"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<CozeResult<MessageObject>?> DeleteAsync(string conversationId, string messageId)
+        public async Task<CozeResult<MessageObject>?> DeleteAsync(string conversationId, string messageId, CancellationToken cancellationToken = default)
         {
-            var api = "/v1/conversation/message/delete";
-            return await _context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Post,
-                parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } });
+            const string api = "/v1/conversation/message/delete";
+            return await context.GetJsonAsync<CozeResult<MessageObject>>(api, HttpMethod.Post,
+                parameters: new Dictionary<string, string> { { "conversation_id", conversationId }, { "message_id", messageId } }, cancellationToken: cancellationToken);
         }
     }
 }

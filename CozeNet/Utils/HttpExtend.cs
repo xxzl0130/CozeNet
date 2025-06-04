@@ -8,14 +8,12 @@ namespace CozeNet.Utils
 {
     internal static class HttpExtend
     {
-        public static async Task<T?> GetJsonObjectAsync<T>(this HttpResponseMessage response)
+        public static async Task<T?> GetJsonObjectAsync<T>(this HttpResponseMessage? response, JsonSerializerOptions options)
         {
-            if (response == null || !response.IsSuccessStatusCode)
+            if (response is not { IsSuccessStatusCode: true })
                 return default(T);
             var str = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrEmpty(str))
-                return default(T);
-            return JsonSerializer.Deserialize<T>(str);
+            return string.IsNullOrEmpty(str) ? default : JsonSerializer.Deserialize<T>(str, options);
         }
     }
 }

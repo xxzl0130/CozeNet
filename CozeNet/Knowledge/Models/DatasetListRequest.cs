@@ -8,7 +8,7 @@ namespace CozeNet.Knowledge.Models
 {
     public class DatasetListRequest
     {
-        public string? SpaceID {  get; set; }
+        public string? SpaceID { get; set; }
 
         public string? Name { get; set; }
 

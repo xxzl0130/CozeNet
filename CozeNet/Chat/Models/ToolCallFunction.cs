@@ -19,6 +19,6 @@ namespace CozeNet.Chat.Models
         /// 方法参数。
         /// </summary>
         [JsonPropertyName("arguments")]
-        public string? Arguments {  get; set; }
+        public string? Arguments { get; set; }
     }
 }

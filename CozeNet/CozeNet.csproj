@@ -4,13 +4,16 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <PackageProjectUrl>https://github.com/xxzl0130/CozeNet</PackageProjectUrl>
     <Authors>xxzl0130</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Coze.cn API的C#实现</Description>
     <Copyright>zaxs0130@gmail.com</Copyright>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>

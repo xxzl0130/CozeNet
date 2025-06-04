@@ -19,7 +19,7 @@ namespace CozeNet.Workflow.Models
         /// 工作流中断类型，恢复运行时应回传此字段。
         /// </summary>
         [JsonPropertyName("type")]
-        public int Type {  get; set; }
+        public int Type { get; set; }
     }
 
     public class InterruptEvent

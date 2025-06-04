@@ -3,6 +3,8 @@ using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using CozeNet.Utils;
@@ -16,9 +18,16 @@ namespace CozeNet.Core
 
         public HttpClient? HttpClient { get; set; }
 
-        public HttpRequestMessage GenerateRequest(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
+        public JsonSerializerOptions JsonOptions { get; set; } = new()
         {
-            var url = $"https://{EndPoint}{(api.StartsWith("/") ? api : $"/{api}")}";
+            TypeInfoResolverChain = { CozeNetJsonSerializerContext.Default },
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseUpper
+        };
+
+        public HttpRequestMessage GenerateRequest(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null, JsonSerializerOptions? jsonOptions = null)
+        {
+            var url = $"https://{EndPoint}{(api.StartsWith('/') ? api : $"/{api}")}";
             if (parameters != null)
             {
                 var builder = new UriBuilder(url);
@@ -43,18 +52,18 @@ namespace CozeNet.Core
             return request;
         }
 
-        public async Task<HttpResponseMessage> SendRequestAsync(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
+        public async Task<HttpResponseMessage> SendRequestAsync(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
         {
             using var request = GenerateRequest(api, method, content, parameters, headers);
-            return await HttpClient!.SendAsync(request);
+            return await HttpClient!.SendAsync(request, cancellationToken);
         }
 
         public async Task<T?> GetJsonAsync<T>(string api, HttpMethod method, HttpContent? content = null,
-            Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null)
+            Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
         {
             using var request = GenerateRequest(api, method, content, parameters, headers);
-            using var response = await HttpClient!.SendAsync(request);
-            return await response.GetJsonObjectAsync<T>();
+            using var response = await HttpClient!.SendAsync(request, cancellationToken);
+            return await response.GetJsonObjectAsync<T>(JsonOptions);
         }
 
         public const string AuthorizationHeader = "Authorization";

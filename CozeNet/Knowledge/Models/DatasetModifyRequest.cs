@@ -19,7 +19,7 @@ namespace CozeNet.Knowledge.Models
         /// 知识库图标，应传入上传文件接口中获取的 file_id。
         /// </summary>
         [JsonPropertyName("file_id")]
-        public string? FileID {  get; set; }
+        public string? FileID { get; set; }
 
         /// <summary>
         /// 知识库描述信息。

@@ -14,7 +14,7 @@ namespace CozeNet.Workflow.Models
         /// 待执行的对话流 ID，此对话流应已发布。
         /// </summary>
         [JsonPropertyName("workflow_id")]
-        public string? WorkflowID {  get; set; }
+        public string? WorkflowID { get; set; }
 
         /// <summary>
         /// 对话中用户问题和历史消息。数组长度限制为 50，即最多传入 50 条消息
@@ -33,14 +33,14 @@ namespace CozeNet.Workflow.Models
         /// 需要关联的扣子应用 ID
         /// </summary>
         [JsonPropertyName("app_id")]
-        public string? AppID {  get; set; }
+        public string? AppID { get; set; }
 
         /// <summary>
         /// 需要关联的智能体 ID。
         /// </summary>
         [JsonPropertyName("bot_id")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? BotID {  get; set; }
+        public string? BotID { get; set; }
 
         /// <summary>
         /// 对话流对应的会话 ID，对话流产生的消息会保存到此对话中
@@ -54,6 +54,6 @@ namespace CozeNet.Workflow.Models
         /// </summary>
         [JsonPropertyName("ext")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, string>? Extra {  get; set; }
+        public Dictionary<string, string>? Extra { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CozeNet.Core.Models
 {
-    internal class TokenRequestBody
+    public class TokenRequestBody
     {
 
         [JsonPropertyName("duration_seconds")]

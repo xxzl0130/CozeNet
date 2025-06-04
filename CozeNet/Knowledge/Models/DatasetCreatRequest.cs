@@ -13,7 +13,7 @@ namespace CozeNet.Knowledge.Models
         /// 知识库名称，长度不超过 100 个字符。
         /// </summary>
         [JsonPropertyName("name")]
-        public string? Name {  get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 知识库所在的空间的 Space ID。Space ID 是空间的唯一标识。
