@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0'
+        dotnet-version: '10.0'
     
     - name: Restore dependencies
       run: dotnet restore
@@ -24,7 +24,9 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     
     - name: Pack
-      run: dotnet pack CozeNet/CozeNet.csproj --configuration Release --no-build -o out
+      run: |
+        dotnet pack CozeNet/CozeNet.csproj --configuration Release --no-build -o out
+        dotnet pack CozeNet.AspNetCore/CozeNet.AspNetCore.csproj --configuration Release --no-build -o out
     
     - name: Push to NuGet
       run: |
