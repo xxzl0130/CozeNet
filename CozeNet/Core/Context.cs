@@ -22,7 +22,7 @@ namespace CozeNet.Core
         {
             TypeInfoResolverChain = { CozeNetJsonSerializerContext.Default },
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseUpper
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         };
 
         public HttpRequestMessage GenerateRequest(string api, HttpMethod method, HttpContent? content = null, Dictionary<string, string>? parameters = null, Dictionary<string, string>? headers = null, JsonSerializerOptions? jsonOptions = null)
